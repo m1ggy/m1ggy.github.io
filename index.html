@@ -1,0 +1,58 @@
+<html>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+
+<style>
+
+</style>
+</head>
+<body>
+    <h1 style="text-align: center; background-color: bisque;">COVID-19 Tracker</h1>
+
+    <h1 style="text-align: center;">Philippines</h1>
+    <form id="sort">
+        
+    </form>
+
+        <div id="stat" style="text-align: center;">
+            
+
+        </div>
+
+        
+ 
+
+<script>
+     
+    const canvas = document.querySelector('#stat');
+    const sort = document.querySelector('#sort')
+    const input1 = document.createElement('h4')
+    const input2 = document.createElement('h2')
+    const input3 = document.createElement('h2')
+    const input4 = document.createElement('h2')
+    
+    
+    fetch('https://pomber.github.io/covid19/timeseries.json')
+    .then(res => res.json())
+    .then(data=>{
+        
+
+                const dateSpecific = data['Philippines'].length-1;
+                const date = document.createTextNode(`Latest Update: ${data['Philippines'][dateSpecific].date}`)
+                const confirmed = document.createTextNode(`Confirmed Cases: ${data['Philippines'][dateSpecific].confirmed}`)
+                const deaths = document.createTextNode(`Deaths: ${data['Philippines'][dateSpecific].deaths}`)
+                const recovered = document.createTextNode(`Recovered: ${data['Philippines'][dateSpecific].recovered}`)
+                input1.appendChild(date)
+                input2.appendChild(confirmed)
+                input3.appendChild(deaths)
+                input4.appendChild(recovered)
+                canvas.appendChild(input1)
+                canvas.appendChild(input2)
+                canvas.appendChild(input3)
+                canvas.appendChild(input4)
+
+            })
+
+</script>
+</body>
+</html>
