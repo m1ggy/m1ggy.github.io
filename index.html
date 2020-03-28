@@ -1,57 +1,99 @@
 <html>
+    <title>
+        COVID-19 Tracker
+    </title>
 <head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
-
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <style>
 
 </style>
 </head>
-<body>
-    <h1 style="text-align: center;">COVID-19 Tracker</h1>
-
-    <h1 style="text-align: center;">Philippines</h1>
-    <form id="sort">
-        
-    </form>
-
-        <div id="stat" style="text-align: center;">
-            
-
+<body style="overflow: auto; padding-bottom: 70px;">
+    <div class="jumbotron bg-primary col-12">
+         <h1 style="text-align: center;color: white;">COVID-19 Tracker</h1>
         </div>
+    <div style="width:300px; margin:auto; col" class="text-center col-12">
+        <select class="custom-select selector">
+            <option selected>Select Country</option>
 
+          </select>
+          <button type="submit" class="btn-success center submit" style="margin:20px">Submit</button>
+          <h6 style="margin:20px">Source: <a href="https://www.who.int/health-topics/coronavirus">WHO</a>, <a href="https://github.com/pomber/covid19">COVID-19 API</a></h6>
+        </div>
+     
+        <div id="stat" class="justify-content-center text-center m-6 col-12 jumbotron bg-light" style="height: 300px;">
+        </div>
         
- 
-
+       
+            <footer class="justify-content-center text-center col-12 jumbotron bottom">
+                <p>Miguel Buising</p>
+                <p><a href="https://github.com/m1ggy">GitHub</a> <a href="https://facebook.com/miggylicious1">Facebook</a></p>
+            </footer>
+       
+        
 <script>
      
     const canvas = document.querySelector('#stat');
-    const sort = document.querySelector('#sort')
-    const input1 = document.createElement('h4')
-    const input2 = document.createElement('h2')
-    const input3 = document.createElement('h2')
-    const input4 = document.createElement('h2')
+    let Selector = document.querySelector('.selector')
+    const submit = document.querySelector('.submit')
     
     
     fetch('https://pomber.github.io/covid19/timeseries.json')
     .then(res => res.json())
     .then(data=>{
-        
+        console.log(Object.keys(data)[0])
+        const dataSize = Object.keys(data).length-1
+       for(let i=0; i<dataSize;i++){
+        let option = document.createElement('option')
+        let selector = document.querySelector('.selector')
+        let attrib = document.createAttribute('value')
 
-                const dateSpecific = data['Philippines'].length-1;
-                const date = document.createTextNode(`Latest Update: ${data['Philippines'][dateSpecific].date}`)
-                const confirmed = document.createTextNode(`Confirmed Cases: ${data['Philippines'][dateSpecific].confirmed}`)
-                const deaths = document.createTextNode(`Deaths: ${data['Philippines'][dateSpecific].deaths}`)
-                const recovered = document.createTextNode(`Recovered: ${data['Philippines'][dateSpecific].recovered}`)
+           const countryName = document.createTextNode(`${Object.keys(data)[i]}`)
+           attrib.value = `${Object.keys(data)[i]}`
+           option.setAttributeNode(attrib)
+           option.appendChild(countryName)
+           selector.appendChild(option)
+       }
+       
+       submit.addEventListener('click',(e)=>{
+           e.preventDefault()
+                let input1 = document.createElement('h1')
+                let input2 = document.createElement('h1')
+                let input3 = document.createElement('h1')
+                let input4 = document.createElement('h1')
+                const dateSpecific = data[`${Selector.value}`].length-1;
+                const preDate = document.createTextNode('Last Update: ');
+                const preconfirmed = document.createTextNode('Confirmed Cases: ');
+                const predeaths = document.createTextNode('Deaths: ');
+                const prerecovered = document.createTextNode('Recovered: ');
+                const date = document.createTextNode(`${data[`${Selector.value}`][dateSpecific].date}`)
+                const confirmed = document.createTextNode(`${data[`${Selector.value}`][dateSpecific].confirmed}`)
+                const deaths = document.createTextNode(`${data[`${Selector.value}`][dateSpecific].deaths}`)
+                const recovered = document.createTextNode(`${data[`${Selector.value}`][dateSpecific].recovered}`)
+               
+                input1.appendChild(preDate)
                 input1.appendChild(date)
+           
+                input2.appendChild(preconfirmed)
                 input2.appendChild(confirmed)
+               
+                input3.appendChild(predeaths)
                 input3.appendChild(deaths)
+              
+                input4.appendChild(prerecovered)
                 input4.appendChild(recovered)
+         
+                console.log(canvas.childElementCount)
+                    if(canvas.childElementCount>0){ 
+                       canvas.innerHTML = ''
+                    }
                 canvas.appendChild(input1)
                 canvas.appendChild(input2)
                 canvas.appendChild(input3)
-                canvas.appendChild(input4)
-
-            })
+                canvas.appendChild(input4)                
+       })                             
+})
 
 </script>
 </body>
